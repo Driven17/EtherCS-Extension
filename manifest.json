@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "EtherCS Market Extension",
+  "version": "0.10",
+  "permissions": [
+    "cookies",
+    "declarativeNetRequest"
+  ],
+  "host_permissions": [
+    "https://steamcommunity.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "referer-fix",
+        "enabled": true,
+        "path": "rules.json"
+      }
+    ]
+  },
+  "externally_connectable": {
+    "matches": ["http://ethercs.com:3000/*", "http://localhost:3000/*"]
+  }
+}
