@@ -1,2 +1,5 @@
 # Ignore metadata folder
 _metadata/
+
+# Ignore icons folder - focus on technical aspect for now
+icons/

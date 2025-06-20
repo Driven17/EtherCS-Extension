@@ -4,13 +4,17 @@
   "version": "0.10",
   "permissions": [
     "cookies",
-    "declarativeNetRequest"
+    "declarativeNetRequest",
+    "scripting",
+    "activeTab",
+    "storage"
   ],
   "host_permissions": [
     "https://steamcommunity.com/*"
   ],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module"
   },
   "declarative_net_request": {
     "rule_resources": [
