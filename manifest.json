@@ -10,8 +10,9 @@
     "storage"
   ],
   "host_permissions": [
-    "https://steamcommunity.com/*"
-  ],
+        "*://*.steamcommunity.com/*",
+        "*://*.steampowered.com/*"
+    ],
   "background": {
     "service_worker": "background.js",
     "type": "module"

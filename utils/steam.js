@@ -1,4 +1,11 @@
 /*
+Converts SteamID32 to SteamID64
+*/
+export function convertSteamID32To64(steamID32) {
+    return (BigInt('76561197960265728') + BigInt(steamID32)).toString();
+}
+
+/*
 Get steam "SessionID" cookie, user must be logged into steam on the same browser
 (Firefox has limited `cookies.*` API support, it uses `browser.*`)
 */
