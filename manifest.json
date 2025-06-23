@@ -11,7 +11,8 @@
   ],
   "host_permissions": [
         "*://*.steamcommunity.com/*",
-        "*://*.steampowered.com/*"
+        "*://*.steampowered.com/*",
+        "http://ethercs.com:3000/*"
     ],
   "background": {
     "service_worker": "background.js",
