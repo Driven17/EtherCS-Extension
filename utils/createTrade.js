@@ -1,7 +1,7 @@
 /*
 Send trade offer through a post request
 */
-export async function CreateTradeOffer(req) {
+export async function createTradeOffer(req) {
     function itemMapper(assetID) {
         return {
             appid: 730,

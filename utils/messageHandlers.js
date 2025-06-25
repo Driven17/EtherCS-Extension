@@ -1,4 +1,4 @@
-import { CreateTradeOffer } from "./createTrade.js";
+import { createTradeOffer } from "./createTrade.js";
 import { getSteamSessionID } from "./steam.js";
 
 export function registerMessageHandlers() {
@@ -14,7 +14,7 @@ export function registerMessageHandlers() {
                     forceEnglish: true
                 };
 
-                const result = await CreateTradeOffer(req);
+                const result = await createTradeOffer(req);
                 console.log("[Background] Trade offer result:", result);
                 sendResponse(result);
             } catch (err) {
