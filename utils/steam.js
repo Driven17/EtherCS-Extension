@@ -1,3 +1,5 @@
+import { storageKey, store } from "../storage/store.js";
+
 /*
 Converts SteamID32 to SteamID64
 */
@@ -34,19 +36,20 @@ export function getSteamSessionID() {
 Parses WebAPI access token from steamcommunity page
 The JWT token is used for tracking/altering trades
 */
-let cachedAccessToken = null;
 export async function getAccessToken(expectedSteamID = null) {
+    const cachedAccess = await store.get(storageKey.ACCESS_TOKEN);
     if (
-        cachedAccessToken &&
-        cachedAccessToken.token &&
-        cachedAccessToken.updated_at > Date.now() - 30 * 60 * 1000
+        cachedAccess &&
+        cachedAccess.token &&
+        cachedAccess.updated_at > Date.now() - 30 * 60 * 1000
     ) {
-        if (!expectedSteamID || expectedSteamID === cachedAccessToken.steam_id) {
-            console.log(cachedAccessToken);
-            return cachedAccessToken;
+        if (!expectedSteamID || expectedSteamID === cachedAccess.steam_id) {
+            console.log('Using stored access token:', cachedAccess);
+            return cachedAccess;
         }
     }
 
+    // If access token not stored OR invalid OR expired, fetch from steamcommunity.com
     const response = await fetch('https://steamcommunity.com', {
         credentials: 'include',
         headers: {
@@ -74,12 +77,14 @@ export async function getAccessToken(expectedSteamID = null) {
         throw new Error('SteamID does not match expected value');
     }
 
-    cachedAccessToken = {
+    const accessToken = {
         token,
         steam_id: steamID,
         updated_at: Date.now(),
     };
 
-    console.log(cachedAccessToken);
-    return cachedAccessToken;
+    await store.set(storageKey.ACCESS_TOKEN, accessToken)
+
+    console.log('Fetched access_token', accessToken);
+    return accessToken;
 }
