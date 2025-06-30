@@ -4,10 +4,9 @@
   "version": "0.10",
   "permissions": [
     "cookies",
-    "declarativeNetRequest",
-    "scripting",
-    "activeTab",
-    "storage"
+    "declarativeNetRequestWithHostAccess",
+    "storage",
+    "alarms"
   ],
   "host_permissions": [
         "*://*.steamcommunity.com/*",
