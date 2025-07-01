@@ -1,6 +1,6 @@
 import { storageKey, store } from "../storage/store.js";
 import { fetchPendingTrades } from "../services/EtherCSAPI.js";
-import { pingSentTrades } from "./tradeUpdates.js";
+import { pingSentTrades, pingCancelledTrades } from "./tradeUpdates.js";
 
 export const PING_TRADE_STATUS_ALARM_NAME = 'ethercs_trade_status_ping';
 
@@ -48,6 +48,12 @@ export async function pingTradeStatus(/* Expected SteamID here */) {
 async function pingUpdates(pendingTrades) {
     try {
         await pingSentTrades(pendingTrades);
+    } catch (e) {
+        console.error('failed to ping sent offers', e);
+    }
+
+    try {
+        await pingCancelledTrades(pendingTrades);
     } catch (e) {
         console.error('failed to ping sent offers', e);
     }
