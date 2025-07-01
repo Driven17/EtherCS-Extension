@@ -30,3 +30,38 @@ export async function fetchPendingTrades() {
     }
 }
 
+export async function processMatchingOffers(data) {
+    try {
+        const resp = await fetch(`${env.ethercs_api_url}/me/process-matching-offers`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+        });
+
+        const text = await resp.text();  // safer than .json() directly
+
+        if (!resp.ok) {
+            console.error(`HTTP ${resp.status}: ${text}`);
+            return { success: false, error: `HTTP ${resp.status}` };
+        }
+
+        let result;
+        try {
+            result = JSON.parse(text);
+        } catch (e) {
+            console.error("Failed to parse JSON response:", text);
+            return { success: false, error: "Invalid JSON response" };
+        }
+
+        if (!result || typeof result !== 'object') {
+            console.error("Malformed result:", result);
+            return { success: false, error: "Malformed response" };
+        }
+
+        return result;
+
+    } catch (e) {
+        console.error("Failed to send trade status update", e);
+        return { success: false, error: "Fetch failed" };
+    }
+}

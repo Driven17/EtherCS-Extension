@@ -20,7 +20,6 @@ Function that fetches sent trade by API
 */
 export async function fetchTradesFromAPI() {
     const access = await getAccessToken();
-    console.log(access.token)
 
     const resp = await fetch(
         `https://api.steampowered.com/IEconService/GetTradeOffers/v1/?access_token=${access.token}&get_sent_offers=true`,
