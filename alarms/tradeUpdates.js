@@ -26,7 +26,9 @@ export async function pingSentTrades(pendingTrades) {
         return acc;
     }, {});
 
-    const matchingOffers = resp.filter((offer) => offerIdMap[offer.offer_id]);
+    const matchingOffers = resp.filter((offer) =>
+        offerIdMap[offer.offer_id] && offer.state !== 2
+    );
 
     console.log("Matching offers:", matchingOffers);
 

@@ -1,5 +1,6 @@
 import { storageKey, store } from "../storage/store.js";
 import { fetchPendingTrades } from "../services/EtherCSAPI.js";
+import { getAccessToken } from "../utils/steam.js";
 import { pingSentTrades, pingCancelledTrades } from "./tradeUpdates.js";
 
 export const PING_TRADE_STATUS_ALARM_NAME = 'ethercs_trade_status_ping';

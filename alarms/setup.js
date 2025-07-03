@@ -24,7 +24,7 @@ export async function registerTradeAlarm() {
 
     if (!alarm || hasAlarmWithOutdatedTimer) {
         await chrome.alarms.create(PING_TRADE_STATUS_ALARM_NAME, {
-            periodInMinutes: 0.5,
+            periodInMinutes: 3,
             delayInMinutes: 1,
         });
     }
