@@ -3,6 +3,7 @@ import { getSteamSessionID } from "./steam.js";
 
 export function registerMessageHandlers() {
     chrome.runtime.onMessageExternal.addListener(async (request, sender, sendResponse) => {
+        
         if (request.type === "send_trade_offer") {
             console.log("[Background] Received send_trade_offer:", request.payload);
 
@@ -22,7 +23,14 @@ export function registerMessageHandlers() {
                 sendResponse({ status: 500, error: err.message });
             }
 
-            return true; // Keeps message channel open
+            return true;
         }
+
+        if (request.type === "ping_extension") {
+            console.log("[Background] Received ping_extension");
+            sendResponse({ status: 200, message: "Extension is installed and running." });
+            return true;
+        }
+
     });
 }

@@ -1,6 +1,7 @@
 import { fetchTradesFromAPI } from "../utils/fetchTrades.js";
 import { processMatchingOffers } from "../services/EtherCSAPI.js";
 import { cancelTradeOffer } from "../utils/cancelTrade.js";
+import { pingTradeStatus } from "./tradePings.js";
 import { storageKey, store } from "../storage/store.js";
 
 export async function pingSentTrades(pendingTrades) {
@@ -8,9 +9,7 @@ export async function pingSentTrades(pendingTrades) {
 
     try {
         resp = await fetchTradesFromAPI();
-        console.log(resp);
         if (!Array.isArray(resp) || resp.length < 1) {
-            console.log("No!");
             return;
         }
     } catch (e) {
@@ -29,6 +28,10 @@ export async function pingSentTrades(pendingTrades) {
     const matchingOffers = resp.filter((offer) =>
         offerIdMap[offer.offer_id] && offer.state !== 2
     );
+    
+    if (matchingOffers.length == 0) {
+        return;
+    }
 
     console.log("Matching offers:", matchingOffers);
 
@@ -49,7 +52,6 @@ export async function pingCancelledTrades(pendingTrades) {
         console.log("Fetched trades:", resp);
 
         if (!Array.isArray(resp) || resp.length < 1) {
-            console.log("No trades found.");
             return;
         }
     } catch (e) {
@@ -71,11 +73,16 @@ export async function pingCancelledTrades(pendingTrades) {
         return (
             offerIdMap[offer.offer_id] &&
             offer.state === 2 &&
-            now - offer.time_updated > 30 * 60
+            now - offer.time_updated > 12 * 60 * 60
         );
     });
 
-    console.log("Matching active offers (older than 30 mins):", offersToCancel);
+    if (offersToCancel.length === 0) {
+        return { cancelled: 0, offers: [], processed: false };
+    }
+
+    console.log("Matching active offers (older than 12 hours):", offersToCancel);
+
     for (const offer of offersToCancel) {
         try {
             await cancelTradeOffer(offer.offer_id);
@@ -85,5 +92,11 @@ export async function pingCancelledTrades(pendingTrades) {
         }
     }
 
-    return offersToCancel;
-}
+    await pingTradeStatus();
+
+    return {
+        cancelled: offersToCancel.length,
+        offers: offersToCancel,
+        processed: true
+    };
+}   

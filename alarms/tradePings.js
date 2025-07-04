@@ -8,7 +8,6 @@ export const PING_TRADE_STATUS_ALARM_NAME = 'ethercs_trade_status_ping';
 export async function pingTradeStatus(/* Expected SteamID here */) {
 
     await store.set(storageKey.LAST_TRADE_PING_ATTEMPT, Date.now());
-    console.log('Pinged');
 
     /* INSERT LOGIC FOR TRADE
     TRACKING PERMISSIONS HERE */
